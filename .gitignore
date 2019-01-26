@@ -12,9 +12,7 @@ node_modules/
 scripts/
 
 # ignore built code
-out/
-build/
-lib/
+dist/
 
 # ignore generated coverage data
 coverage.json

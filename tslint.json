@@ -6,6 +6,7 @@
     "no-implicit-dependencies": [false],
     "object-literal-sort-keys": [true],
     "no-default-export": true,
+    "import-name": false,
     "object-shorthand-properties-first": false
   }
 }

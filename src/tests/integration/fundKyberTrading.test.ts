@@ -61,7 +61,6 @@ beforeAll(async () => {
     exchangeConfigs,
     fees: [],
     fundName: 'Test fund',
-    manager: envManager.wallet.address,
     quoteToken: s.wethTokenInterface,
   });
   await createAccounting(envManager, s.version.options.address);

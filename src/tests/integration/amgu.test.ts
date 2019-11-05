@@ -61,7 +61,6 @@ test('Set amgu and check its usage', async () => {
     exchangeConfigs,
     fees,
     fundName,
-    manager: shared.env.wallet.address,
     priceSource: melonContracts.priceSource,
     quoteToken,
   };

@@ -34,7 +34,6 @@ contract FundFactory is AmguConsumer, Factory {
 
     address[] public funds;
     mapping (address => address) public managersToHubs;
-    mapping (address => address) public managersToDelegatedCreators;
     mapping (address => Hub.Routes) public managersToRoutes;
     mapping (address => Settings) public managersToSettings;
 
@@ -88,14 +87,7 @@ contract FundFactory is AmguConsumer, Factory {
         );
     }
 
-    // allow _creator to set up a fund for msg.sender
-    // after this, the delegated creator OR the manager can initiate setup
-    function permitDelegatedCreation(address _creator) external {
-        managersToDelegatedCreators[msg.sender] = _creator;
-    }
-
     function beginSetup(
-        address _manager,
         string _name,
         address[] _fees,
         uint[] _feeRates,
@@ -107,15 +99,9 @@ contract FundFactory is AmguConsumer, Factory {
     )
         public
     {
-        ensureComponentNotSet(managersToHubs[_manager]);
-        require(
-            managersToDelegatedCreators[_manager] == msg.sender ||
-            msg.sender == _manager,
-            "Not permitted to set up a Fund for this manager"
-        );
-
+        ensureComponentNotSet(managersToHubs[msg.sender]);
         Registry(registry).reserveFundName(
-            _manager,
+            msg.sender,
             _name
         );
         require(
@@ -123,8 +109,8 @@ contract FundFactory is AmguConsumer, Factory {
             "Denomination asset must be registered"
         );
 
-        managersToHubs[_manager] = new Hub(_manager, _name);
-        managersToSettings[_manager] = Settings(
+        managersToHubs[msg.sender] = new Hub(msg.sender, _name);
+        managersToSettings[msg.sender] = Settings(
             _name,
             _exchanges,
             _adapters,
@@ -134,11 +120,11 @@ contract FundFactory is AmguConsumer, Factory {
             _feeRates,
             _feePeriods
         );
-        managersToRoutes[_manager].priceSource = priceSource();
-        managersToRoutes[_manager].registry = registry;
-        managersToRoutes[_manager].version = address(version);
-        managersToRoutes[_manager].engine = engine();
-        managersToRoutes[_manager].mlnToken = mlnToken();
+        managersToRoutes[msg.sender].priceSource = priceSource();
+        managersToRoutes[msg.sender].registry = registry;
+        managersToRoutes[msg.sender].version = address(version);
+        managersToRoutes[msg.sender].engine = engine();
+        managersToRoutes[msg.sender].mlnToken = mlnToken();
     }
 
     function _createAccountingFor(address _manager)

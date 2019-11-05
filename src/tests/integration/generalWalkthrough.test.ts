@@ -123,7 +123,6 @@ describe('generalWalkthrough', () => {
       exchangeConfigs,
       fees,
       fundName,
-      manager: shared.env.wallet.address,
       quoteToken: ethToken,
     });
 

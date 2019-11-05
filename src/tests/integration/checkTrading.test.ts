@@ -49,7 +49,6 @@ beforeAll(async () => {
     exchangeConfigs,
     fees: [],
     fundName: 'Test fund',
-    manager: envManager.wallet.address,
     quoteToken: s.wethTokenInterface,
   });
   await createAccounting(envManager, s.version.options.address);
@@ -61,4 +60,9 @@ beforeAll(async () => {
   await createVault(envManager, s.version.options.address);
   const hubAddress = await completeSetup(envManager, s.version.options.address);
   s.fund = await getFundComponents(envManager, hubAddress);
+});
+
+test('Transfer ethToken to the investor', async () => {
+  console.log(await s.version.methods.getExchangesInfo(s.manager).call());
+  console.log(await s.fund.trading.methods.getExchangeInfo().call());
 });
